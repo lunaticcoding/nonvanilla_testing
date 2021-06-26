@@ -1,3 +1,7 @@
+## 0.0.2
+
+* Update pubspec.yaml to follow guidelines
+
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial release of the plugin.
