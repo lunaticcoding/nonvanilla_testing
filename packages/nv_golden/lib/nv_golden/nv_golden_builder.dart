@@ -1,7 +1,12 @@
 import 'dart:collection';
 import 'dart:math';
+import 'dart:ui';
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nv_golden/nv_golden/loading/font_loader.dart';
+import 'package:nv_golden/nv_golden/loading/nv_font_loader.dart';
+import 'package:nv_golden/nv_golden/loading/test_asset_bundle.dart';
 
 import 'iterable_extensions.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +14,8 @@ import 'package:nv_golden/nv_golden/screen.dart';
 
 import 'scenario.dart';
 
+/// The central class of our golden testing framework. It provides a small but
+/// powerful interface for golden tests.
 class NvGolden {
   static const double _padding = 8;
   final int nrColumns;
@@ -16,16 +23,22 @@ class NvGolden {
   final List<Screen> _deviceSizes;
   final Widget Function(Widget child)? wrap;
 
+  /// Constructor for widget tests
   NvGolden.grid({required this.nrColumns, Screen? screen, this.wrap})
       : _scenarios = [],
         _deviceSizes = screen != null ? [screen] : [];
 
+  /// Constructor for device tests
   NvGolden.devices({required List<Screen> deviceSizes, this.wrap})
       : nrColumns = deviceSizes.length,
         _scenarios = [],
         _deviceSizes = deviceSizes,
         assert(deviceSizes.isNotEmpty);
 
+  /// Initialize golden tests
+  static Future<void> init() async => loadAppFonts();
+
+  /// Add a golden test scenario
   void addScenario({
     required String name,
     required Widget widget,
@@ -68,6 +81,7 @@ class NvGolden {
         ),
       );
 
+  /// Calculate the size for the whole golden file
   Size get size {
     final widths = _scenarios.mapGrouped(
       (scenarios) => scenarios.fold<double>(
@@ -104,18 +118,55 @@ class NvGolden {
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(NvGolden nvGolden, String goldenName) async {
     final widget = nvGolden.widget;
-    final totalSize = nvGolden.size;
+    final screenSize = nvGolden.size;
 
-    await binding.setSurfaceSize(Size(totalSize.width, totalSize.height));
+    await binding.setSurfaceSize(screenSize);
+    binding.window.physicalSizeTestValue = screenSize;
+    binding.window.devicePixelRatioTestValue = 1.0;
+    binding.window.textScaleFactorTestValue = 1.0;
 
-    await pumpWidget(widget);
+    await _defaultPrimeAssets();
+
+    await pumpWidget(
+      DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
+    );
+    await pump();
+
     await expectLater(
       find.byWidget(widget),
       matchesGoldenFile('goldens/$goldenName.png'),
     );
   }
+
+  /// A function that waits for all [Image] widgets found in the widget tree to finish decoding.
+  ///
+  /// Currently this supports images included via Image widgets, or as part of BoxDecorations.
+  Future<void> _defaultPrimeAssets() async {
+    final imageElements = find.byType(Image, skipOffstage: false).evaluate();
+    final containerElements =
+        find.byType(DecoratedBox, skipOffstage: false).evaluate();
+    await runAsync(() async {
+      for (final imageElement in imageElements) {
+        final widget = imageElement.widget;
+        if (widget is Image) {
+          await precacheImage(widget.image, imageElement);
+        }
+      }
+      for (final container in containerElements) {
+        final widget = container.widget as DecoratedBox;
+        final decoration = widget.decoration;
+        if (decoration is BoxDecoration) {
+          if (decoration.image != null) {
+            await precacheImage(decoration.image!.image, container);
+          }
+        }
+      }
+    });
+  }
 }
 
+/// A widget wrapper which can be extended to make the widget wrapping much
+/// cleaner.
 class NvWidgetWrapper {
   final Queue<Widget Function(Widget child)> _widgetQueue;
 
