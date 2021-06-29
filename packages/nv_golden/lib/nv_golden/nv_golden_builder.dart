@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nv_golden/nv_golden/loading/font_loader.dart';
-import 'package:nv_golden/nv_golden/loading/nv_font_loader.dart';
 import 'package:nv_golden/nv_golden/loading/test_asset_bundle.dart';
 
 import 'iterable_extensions.dart';
