@@ -5,7 +5,6 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:example/main.dart';
@@ -16,16 +15,20 @@ import 'widget_wrapper.dart';
 void main() {
   setUpAll(NvGolden.init);
 
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Full Page renders correctly', (WidgetTester tester) async {
     final nvWrapper = WidgetWrapper()..withMaterialApp();
 
-    final nvGolden =
-        NvGolden.devices(deviceSizes: [Device.iphone12pro, Device.iphone5s])
-          ..addScenario(
-            name: 'Full Page',
-            widget: nvWrapper.wrap(MyHomePage(title: 'Test')),
-          );
+    final nvGolden = NvGolden.devices(
+        deviceSizes: [Device.iphone12pro, Device.iphone5s],
+        wrap: nvWrapper.wrap)
+      ..addScenario(
+        name: 'Full Page',
+        widget: MyHomePage(title: 'Test'),
+      );
 
-    await tester.createGolden(nvGolden, 'counter test');
+    await tester.createGolden(
+      nvGolden,
+      'full_page',
+    );
   });
 }

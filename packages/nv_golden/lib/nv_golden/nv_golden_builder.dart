@@ -70,7 +70,6 @@ class NvGolden {
         padding: EdgeInsets.all(_padding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          textDirection: TextDirection.ltr,
           children: _scenarios
               .mapGrouped(
                 _mapScenariosToRow,
@@ -104,19 +103,15 @@ class NvGolden {
   Widget _mapScenariosToRow(List<Scenario> scenarios) => scenarios.length == 1
       ? scenarios.map((scenario) => scenario.build()).first
       : Row(
-          textDirection: TextDirection.ltr,
           mainAxisSize: MainAxisSize.min,
-          children: scenarios
-              .map(
-                (scenario) => wrap?.call(scenario.build()) ?? scenario.build(),
-              )
-              .toList(),
+          children: scenarios.map((scenario) => scenario.build()).toList(),
         );
 }
 
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(NvGolden nvGolden, String goldenName) async {
-    final widget = nvGolden.widget;
+    final widget = nvGolden.wrap?.call(nvGolden.widget) ??
+        MaterialApp(home: nvGolden.widget);
     final screenSize = nvGolden.size;
 
     await binding.setSurfaceSize(screenSize);
@@ -126,6 +121,22 @@ extension CreateGolden on WidgetTester {
 
     await _defaultPrimeAssets();
 
+    await pumpWidget(
+      DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
+    );
+    await pump();
+
+    await expectLater(
+      find.byWidget(widget),
+      matchesGoldenFile('goldens/$goldenName.png'),
+    );
+
+    // TODO remove this after google_fonts update
+    // Create the same golden twice because google_fonts has an issue with
+    // the first time we try creating a golden. This is a hacky temporary
+    // solution until issue (www) is resolved.
+    // [feature request] provide a function to preload fonts #151 related to
+    // [feature]Add callback that gets fired when font gets loaded #150
     await pumpWidget(
       DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
     );
