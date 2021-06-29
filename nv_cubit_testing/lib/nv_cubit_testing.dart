@@ -2,7 +2,12 @@ library nv_cubit_testing;
 
 import 'package:bloc/bloc.dart';
 
+/// A wrapper to increase discoverability should more methods be added in the
+/// future.
 class NvCubitTesting {
+  /// Method to collect all states emitted by the actions performed on the
+  /// cubit and cleans everything up.
+  /// Returns a List of states.
   static Future<List<T>> collectCubitStates<C extends Cubit<T>, T>({
     required C Function() build,
     Future<void> Function(C cubit)? act,
