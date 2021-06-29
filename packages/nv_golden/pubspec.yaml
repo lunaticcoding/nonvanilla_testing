@@ -1,7 +1,8 @@
 name: nv_golden
-description: A new Flutter project.
-version: 0.0.1
-homepage:
+description: The golden testing framework we use at nonvanilla. Thanks to the people at ebay that strongly inspired this plugin with their golden_toolkit.
+version: 0.0.4
+homepage: https://github.com/nonvanilla-shop/nonvanilla_testing/
+repository: https://github.com/nonvanilla-shop/nonvanilla_testing/tree/master/packages/nv_golden
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -10,8 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-dev_dependencies:
   flutter_test:
     sdk: flutter
 
