@@ -1,3 +1,15 @@
+## 0.0.4
+
+* Add Asset loading
+
+## 0.0.3
+
+* Minimize the interface and add documentation
+
+## 0.0.2
+
+* Update pubspec.yaml to follow guidelines
+
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial release of the plugin.

@@ -23,13 +23,16 @@ Future<void> loadAppFonts() async {
     (string) async => json.decode(string),
   );
 
+  final loaders = <FontLoader>[];
   for (final Map<String, dynamic> font in fontManifest) {
     final fontLoader = FontLoader(derivedFontFamily(font));
     for (final Map<String, dynamic> fontType in font['fonts']) {
       fontLoader.addFont(rootBundle.load(fontType['asset']));
     }
-    await fontLoader.load();
+    loaders.add(fontLoader);
   }
+
+  await Future.wait(loaders.map((loader) => loader.load()));
 }
 
 /// There is no way to easily load the Roboto or Cupertino fonts.
@@ -79,49 +82,3 @@ const List<String> _overridableFonts = [
   '.SF Pro Text',
   '.SF Pro Display',
 ];
-
-// class NvFontsLoader {
-//   static Future<void> loadFonts() async {
-//     final icons = _getFontLoader(
-//       fontFamily: 'NvIcons',
-//       fileNames: ['NvIcons.ttf'],
-//     );
-//
-//     final lato = _getFontLoader(
-//       fontFamily: 'Lato',
-//       fileNames: [
-//         'Lato-Thin.ttf',
-//         'Lato-ThinItalic.ttf',
-//         'Lato-Light.ttf',
-//         'Lato-LightItalic.ttf',
-//         'Lato-Regular.ttf',
-//         'Lato-Italic.ttf',
-//         'Lato-Bold.ttf',
-//         'Lato-BoldItalic.ttf',
-//         'Lato-Black.ttf',
-//         'Lato-BlackItalic.ttf',
-//       ],
-//     );
-//
-//     await Future.wait([
-//       icons.load(),
-//       lato.load(),
-//     ]);
-//   }
-//
-//   static FontLoader _getFontLoader({
-//     required String fontFamily,
-//     required List<String> fileNames,
-//   }) {
-//     final fontLoader = FontLoader(fontFamily);
-//     for (String fileName in fileNames) {
-//       fontLoader.addFont(
-//         File.fromUri(Directory.current.uri.resolve('./fonts/$fileName'))
-//             .readAsBytes()
-//             .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer)),
-//       );
-//     }
-//     return fontLoader;
-//   }
-// }
-//
