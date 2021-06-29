@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// The Screen class can be used to create your own devices as well as simply
+/// the sizes for the widgets you want to test.
 class Screen {
   final String? name;
   final Size size;
