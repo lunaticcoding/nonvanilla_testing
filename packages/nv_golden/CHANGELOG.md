@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Add workaround for google fonts
+
 ## 0.0.4
 
 * Add Asset loading
