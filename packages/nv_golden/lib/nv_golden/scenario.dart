@@ -24,6 +24,7 @@ class Scenario {
   });
 
   Widget build() => Container(
+        clipBehavior: Clip.hardEdge,
         margin: const EdgeInsets.all(_margin),
         width: screen.size.width,
         height: screen.size.height + _textHeight + _borderThickness * 2,
