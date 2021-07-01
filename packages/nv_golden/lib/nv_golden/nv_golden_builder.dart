@@ -119,8 +119,6 @@ extension CreateGolden on WidgetTester {
     binding.window.devicePixelRatioTestValue = 1.0;
     binding.window.textScaleFactorTestValue = 1.0;
 
-    await _defaultPrimeAssets();
-
     await pumpWidget(
       DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
     );
@@ -140,6 +138,9 @@ extension CreateGolden on WidgetTester {
     await pumpWidget(
       DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
     );
+    
+    await _defaultPrimeAssets();
+
     await pump();
 
     await expectLater(
@@ -156,21 +157,24 @@ extension CreateGolden on WidgetTester {
     final containerElements =
         find.byType(DecoratedBox, skipOffstage: false).evaluate();
     await runAsync(() async {
-      for (final imageElement in imageElements) {
+      await Future.wait(imageElements.map((imageElement) {
         final widget = imageElement.widget;
         if (widget is Image) {
-          await precacheImage(widget.image, imageElement);
+          return precacheImage(widget.image, imageElement);
         }
-      }
-      for (final container in containerElements) {
+        return Future<void>(() {});
+      }));
+
+      await Future.wait(containerElements.map((container) {
         final widget = container.widget as DecoratedBox;
         final decoration = widget.decoration;
         if (decoration is BoxDecoration) {
           if (decoration.image != null) {
-            await precacheImage(decoration.image!.image, container);
+            return precacheImage(decoration.image!.image, container);
           }
         }
-      }
+        return Future<void>(() {});
+      }));
     });
   }
 }
