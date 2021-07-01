@@ -1,6 +1,6 @@
 name: nv_golden
 description: The golden testing framework we use at nonvanilla. Thanks to the people at ebay that strongly inspired this plugin with their golden_toolkit.
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/nonvanilla-shop/nonvanilla_testing/
 repository: https://github.com/nonvanilla-shop/nonvanilla_testing/tree/master/packages/nv_golden
 

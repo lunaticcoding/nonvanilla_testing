@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Fix image loading and add clip rect
+
 ## 0.0.5
 
 * Add workaround for google fonts
