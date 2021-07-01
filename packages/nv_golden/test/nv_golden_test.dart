@@ -7,6 +7,8 @@ import 'package:nv_golden/nv_golden/screen.dart';
 import 'nonvanilla_testing.dart';
 import 'sample_widgets/icon_button.dart';
 import 'sample_widgets/image_button.dart';
+import 'sample_widgets/mediaquery_page.dart';
+import 'sample_widgets/regular_page.dart';
 
 void main() {
   setUpAll(loadAppFonts);
@@ -86,6 +88,24 @@ void main() {
 
   testWidgets('test full page with and without media query on 2 devices',
       (tester) async {
+    final nvWrapper = NvWidgetWrapper()..withDirectionality();
+
+    final nvGolden =
+        NvGolden.devices(deviceSizes: [Device.iphone12pro, Device.iphone5s])
+          ..addScenario(
+            name: 'Page using MediaQuery',
+            widget: nvWrapper.wrap(MediaQueryPage()),
+          )
+          ..addScenario(
+            name: 'Page without using MediaQuery',
+            widget: nvWrapper.wrap(RegularPage()),
+          );
+
+    await tester.createGolden(nvGolden, 'multiple_device_media_query_page');
+    await tester.createGolden(nvGolden, 'image_button');
+  });
+
+  testWidgets('test image loading', (tester) async {
     final nvWrapper = NvWidgetWrapper()..withDirectionality();
 
     final nvGolden =
