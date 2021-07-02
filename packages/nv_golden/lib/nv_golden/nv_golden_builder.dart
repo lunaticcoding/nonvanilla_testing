@@ -111,7 +111,10 @@ class NvGolden {
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(NvGolden nvGolden, String goldenName) async {
     final widget = nvGolden.wrap?.call(nvGolden.widget) ??
-        MaterialApp(home: nvGolden.widget);
+        MaterialApp(
+          home: nvGolden.widget,
+          debugShowCheckedModeBanner: false,
+        );
     final screenSize = nvGolden.size;
 
     await binding.setSurfaceSize(screenSize);
@@ -138,7 +141,7 @@ extension CreateGolden on WidgetTester {
     await pumpWidget(
       DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
     );
-    
+
     await _defaultPrimeAssets();
 
     await pump();
