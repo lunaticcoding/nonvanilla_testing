@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Hide Debug Banner for goldens
+
 ## 0.0.6
 
 * Fix image loading and add clip rect
