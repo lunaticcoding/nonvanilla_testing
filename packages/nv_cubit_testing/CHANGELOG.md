@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Add extension method for bloc mocking
+
 ## 0.0.3
 
 * Add Example, update Readme.md and description
