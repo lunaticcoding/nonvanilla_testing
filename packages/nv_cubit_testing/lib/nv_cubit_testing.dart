@@ -1,6 +1,7 @@
 library nv_cubit_testing;
 
 import 'package:bloc/bloc.dart';
+import 'package:mockito/mockito.dart';
 
 /// A wrapper to increase discoverability should more methods be added in the
 /// future.
@@ -24,5 +25,12 @@ class NvCubitTesting {
     await subscription.cancel();
 
     return states;
+  }
+}
+
+extension CubitWhen<T> on Cubit<T> {
+  void withState(T cubitState) {
+    when(state).thenAnswer((_) => cubitState);
+    when(stream).thenAnswer((_) => Stream.value(cubitState));
   }
 }
