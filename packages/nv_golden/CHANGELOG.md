@@ -1,3 +1,15 @@
+## 0.0.10
+
+* Remove google_fonts support - waiting for google_fonts to provide loading function
+
+## 0.0.9
+
+* Fix bug in google_fonts workaround properly
+
+## 0.0.8
+
+* Fix bug in google_fonts workaround
+
 ## 0.0.7
 
 * Hide Debug Banner for goldens
