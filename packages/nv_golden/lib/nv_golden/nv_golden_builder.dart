@@ -125,22 +125,6 @@ extension CreateGolden on WidgetTester {
     await pumpWidget(
       DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
     );
-    await pump();
-
-    await expectLater(
-      find.byWidget(widget),
-      matchesGoldenFile('goldens/$goldenName.png'),
-    );
-
-    // TODO remove this after google_fonts update
-    // Create the same golden twice because google_fonts has an issue with
-    // the first time we try creating a golden. This is a hacky temporary
-    // solution until issue (www) is resolved.
-    // [feature request] provide a function to preload fonts #151 related to
-    // [feature]Add callback that gets fired when font gets loaded #150
-    await pumpWidget(
-      DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
-    );
 
     await _defaultPrimeAssets();
 
