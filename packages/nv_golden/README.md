@@ -46,6 +46,9 @@ The following test shows you pretty much everything there is to know.
 ```
 
 It produces the following screenshot/golden:
+
+
+
 <img src="example/test/goldens/icon_button_universal_size.png" alt="icon buttons" width=200\>
 
 ## Google Fonts Support
