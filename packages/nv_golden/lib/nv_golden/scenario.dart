@@ -4,7 +4,8 @@ import 'package:nv_golden/nv_golden/screen.dart';
 class Scenario {
   static const double _margin = 8;
   static const double _borderThickness = 1;
-  static const double _textHeight = 18;
+  static const double _textHeight = 30;
+  static const double _space = 10;
 
   final Widget widget;
   final String name;
@@ -13,7 +14,11 @@ class Scenario {
 
   Size get size => Size(
         screen.size.width + _margin * 2 + _borderThickness * 2,
-        screen.size.height + _margin * 2 + _textHeight + _borderThickness * 2,
+        screen.size.height +
+            _margin * 2 +
+            _textHeight +
+            _borderThickness * 2 +
+            _space,
       );
 
   Scenario({
@@ -23,12 +28,11 @@ class Scenario {
     this.wrap,
   });
 
-  Widget build() => Container(
-        clipBehavior: Clip.hardEdge,
+  Widget build(BoxDecoration? decoration) => Container(
         margin: const EdgeInsets.all(_margin),
         width: screen.size.width,
-        height: screen.size.height + _textHeight + _borderThickness * 2,
-        decoration: BoxDecoration(border: Border.all()),
+        height:
+            screen.size.height + _textHeight + _borderThickness * 2 + _space,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           textDirection: TextDirection.ltr,
@@ -37,22 +41,25 @@ class Scenario {
               height: _textHeight,
               child: Center(
                 child: Text(
-                  screen.name != null ? '$name - ${screen.name}' : '$name',
+                  screen.name != null ? '(${screen.name}) $name' : '$name',
                   overflow: TextOverflow.ellipsis,
                   textDirection: TextDirection.ltr,
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 10,
+                    fontSize: 22,
                     decoration: TextDecoration.none,
                   ),
                 ),
               ),
             ),
+            SizedBox(height: _space),
             Container(
               width: screen.size.width,
               height: screen.size.height,
+              clipBehavior: Clip.hardEdge,
+              decoration: decoration ?? BoxDecoration(),
               child: Builder(
                 builder: (context) {
                   final mediaQuery =

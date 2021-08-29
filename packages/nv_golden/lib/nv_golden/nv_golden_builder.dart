@@ -21,17 +21,26 @@ class NvGolden {
   final List<Scenario> _scenarios;
   final List<Screen> _deviceSizes;
   final Widget Function(Widget child)? wrap;
+  final BoxDecoration? decoration;
 
   /// Constructor for widget tests
-  NvGolden.grid({required this.nrColumns, Screen? screen, this.wrap})
-      : _scenarios = [],
+  NvGolden.grid({
+    required this.nrColumns,
+    Screen? screen,
+    this.wrap,
+    this.decoration,
+  })  : _scenarios = [],
         _deviceSizes = screen != null ? [screen] : [];
 
   /// Constructor for device tests
-  NvGolden.devices({required List<Screen> deviceSizes, this.wrap})
-      : nrColumns = deviceSizes.length,
+  NvGolden.devices({
+    required List<Screen> deviceSizes,
+    BoxDecoration? decoration,
+    this.wrap,
+  })  : nrColumns = deviceSizes.length,
         _scenarios = [],
         _deviceSizes = deviceSizes,
+        decoration = decoration ?? BoxDecoration(border: Border.all()),
         assert(deviceSizes.isNotEmpty);
 
   /// Initialize golden tests
@@ -101,10 +110,11 @@ class NvGolden {
   }
 
   Widget _mapScenariosToRow(List<Scenario> scenarios) => scenarios.length == 1
-      ? scenarios.map((scenario) => scenario.build()).first
+      ? scenarios.map((scenario) => scenario.build(decoration)).first
       : Row(
           mainAxisSize: MainAxisSize.min,
-          children: scenarios.map((scenario) => scenario.build()).toList(),
+          children:
+              scenarios.map((scenario) => scenario.build(decoration)).toList(),
         );
 }
 
