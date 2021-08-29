@@ -48,8 +48,7 @@ The following test shows you pretty much everything there is to know.
 It produces the following screenshot/golden:
 
 
-
-<img src="example/test/goldens/icon_button_universal_size.png" alt="icon buttons" width=200\>
+![Example NvGolden output](example/test/goldens/icon_button_universal_size.png)
 
 ## Google Fonts Support
 The google_fonts plugin unfortunately does not yet provide a method to await loading the fonts during testing and is therefore not compatible with this plugin. Should the method ever be added to google_fonts simply call it alongside `NvGolden.init()` in the setUpAll method. 
