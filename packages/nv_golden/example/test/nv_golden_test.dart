@@ -20,27 +20,39 @@ void main() {
 
     final nvGolden = NvGolden.grid(nrColumns: 2, screen: smallDevice)
       ..addScenario(
-        name: 'Icon 1',
+        name: 'Title',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 1', icon: Icons.title),
+          SampleIconButton(
+            text: 'Title',
+            icon: Icons.title,
+          ),
         ),
       )
       ..addScenario(
-        name: 'Icon 2',
+        name: 'Build',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 2', icon: Icons.build),
+          SampleIconButton(
+            text: 'Build',
+            icon: Icons.build,
+          ),
         ),
       )
       ..addScenario(
-        name: 'Icon 3',
+        name: 'Expand',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 3', icon: Icons.expand),
+          SampleIconButton(
+            text: 'Expand',
+            icon: Icons.expand,
+          ),
         ),
       )
       ..addScenario(
-        name: 'Icon 4',
+        name: 'Circle',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 4', icon: Icons.circle),
+          SampleIconButton(
+            text: 'Circle',
+            icon: Icons.circle,
+          ),
         ),
       );
 
