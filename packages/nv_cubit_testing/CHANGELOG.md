@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Document withState method
+
 ## 0.0.4
 
 * Add extension method for bloc mocking

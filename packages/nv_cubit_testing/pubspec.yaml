@@ -1,6 +1,6 @@
 name: nv_cubit_testing
 description: Cubit testing plugin used by NonVanilla. It provides a more flexible solution than bloc_test.
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/nonvanilla-shop/nonvanilla_testing
 repository: https://github.com/nonvanilla-shop/nonvanilla_testing/tree/master/nv_cubit_testing
 
