@@ -21,17 +21,26 @@ class NvGolden {
   final List<Scenario> _scenarios;
   final List<Screen> _deviceSizes;
   final Widget Function(Widget child)? wrap;
+  final BoxDecoration? decoration;
 
   /// Constructor for widget tests
-  NvGolden.grid({required this.nrColumns, Screen? screen, this.wrap})
-      : _scenarios = [],
+  NvGolden.grid({
+    required this.nrColumns,
+    Screen? screen,
+    this.wrap,
+    this.decoration,
+  })  : _scenarios = [],
         _deviceSizes = screen != null ? [screen] : [];
 
   /// Constructor for device tests
-  NvGolden.devices({required List<Screen> deviceSizes, this.wrap})
-      : nrColumns = deviceSizes.length,
+  NvGolden.devices({
+    required List<Screen> deviceSizes,
+    BoxDecoration? decoration,
+    this.wrap,
+  })  : nrColumns = deviceSizes.length,
         _scenarios = [],
         _deviceSizes = deviceSizes,
+        decoration = decoration ?? BoxDecoration(border: Border.all()),
         assert(deviceSizes.isNotEmpty);
 
   /// Initialize golden tests
@@ -101,17 +110,21 @@ class NvGolden {
   }
 
   Widget _mapScenariosToRow(List<Scenario> scenarios) => scenarios.length == 1
-      ? scenarios.map((scenario) => scenario.build()).first
+      ? scenarios.map((scenario) => scenario.build(decoration)).first
       : Row(
           mainAxisSize: MainAxisSize.min,
-          children: scenarios.map((scenario) => scenario.build()).toList(),
+          children:
+              scenarios.map((scenario) => scenario.build(decoration)).toList(),
         );
 }
 
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(NvGolden nvGolden, String goldenName) async {
     final widget = nvGolden.wrap?.call(nvGolden.widget) ??
-        MaterialApp(home: nvGolden.widget);
+        MaterialApp(
+          home: nvGolden.widget,
+          debugShowCheckedModeBanner: false,
+        );
     final screenSize = nvGolden.size;
 
     await binding.setSurfaceSize(screenSize);
@@ -119,27 +132,12 @@ extension CreateGolden on WidgetTester {
     binding.window.devicePixelRatioTestValue = 1.0;
     binding.window.textScaleFactorTestValue = 1.0;
 
+    await pumpWidget(
+      DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
+    );
+
     await _defaultPrimeAssets();
 
-    await pumpWidget(
-      DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
-    );
-    await pump();
-
-    await expectLater(
-      find.byWidget(widget),
-      matchesGoldenFile('goldens/$goldenName.png'),
-    );
-
-    // TODO remove this after google_fonts update
-    // Create the same golden twice because google_fonts has an issue with
-    // the first time we try creating a golden. This is a hacky temporary
-    // solution until issue (www) is resolved.
-    // [feature request] provide a function to preload fonts #151 related to
-    // [feature]Add callback that gets fired when font gets loaded #150
-    await pumpWidget(
-      DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
-    );
     await pump();
 
     await expectLater(
@@ -156,21 +154,24 @@ extension CreateGolden on WidgetTester {
     final containerElements =
         find.byType(DecoratedBox, skipOffstage: false).evaluate();
     await runAsync(() async {
-      for (final imageElement in imageElements) {
+      await Future.wait(imageElements.map((imageElement) {
         final widget = imageElement.widget;
         if (widget is Image) {
-          await precacheImage(widget.image, imageElement);
+          return precacheImage(widget.image, imageElement);
         }
-      }
-      for (final container in containerElements) {
+        return Future<void>(() {});
+      }));
+
+      await Future.wait(containerElements.map((container) {
         final widget = container.widget as DecoratedBox;
         final decoration = widget.decoration;
         if (decoration is BoxDecoration) {
           if (decoration.image != null) {
-            await precacheImage(decoration.image!.image, container);
+            return precacheImage(decoration.image!.image, container);
           }
         }
-      }
+        return Future<void>(() {});
+      }));
     });
   }
 }

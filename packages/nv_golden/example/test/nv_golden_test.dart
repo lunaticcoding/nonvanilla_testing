@@ -5,8 +5,8 @@ import 'package:nv_golden/nv_golden.dart';
 import 'package:nv_golden/nv_golden/loading/font_loader.dart';
 import 'package:nv_golden/nv_golden/screen.dart';
 import 'nonvanilla_testing.dart';
+import 'sample_widgets/button_image.dart';
 import 'sample_widgets/icon_button.dart';
-import 'sample_widgets/image_button.dart';
 import 'sample_widgets/mediaquery_page.dart';
 import 'sample_widgets/regular_page.dart';
 
@@ -20,27 +20,39 @@ void main() {
 
     final nvGolden = NvGolden.grid(nrColumns: 2, screen: smallDevice)
       ..addScenario(
-        name: 'Icon 1',
+        name: 'Title',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 1', icon: Icons.title),
+          SampleIconButton(
+            text: 'Title',
+            icon: Icons.title,
+          ),
         ),
       )
       ..addScenario(
-        name: 'Icon 2',
+        name: 'Build',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 2', icon: Icons.build),
+          SampleIconButton(
+            text: 'Build',
+            icon: Icons.build,
+          ),
         ),
       )
       ..addScenario(
-        name: 'Icon 3',
+        name: 'Expand',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 3', icon: Icons.expand),
+          SampleIconButton(
+            text: 'Expand',
+            icon: Icons.expand,
+          ),
         ),
       )
       ..addScenario(
-        name: 'Icon 4',
+        name: 'Circle',
         widget: nvWrapper.wrap(
-          SampleIconButton(text: 'icon 4', icon: Icons.circle),
+          SampleIconButton(
+            text: 'Circle',
+            icon: Icons.circle,
+          ),
         ),
       );
 
@@ -93,11 +105,11 @@ void main() {
     final nvGolden =
         NvGolden.devices(deviceSizes: [Device.iphone12pro, Device.iphone5s])
           ..addScenario(
-            name: 'with MediaQuery',
+            name: 'Page using MediaQuery',
             widget: nvWrapper.wrap(MediaQueryPage()),
           )
           ..addScenario(
-            name: 'no MediaQuery',
+            name: 'Page without using MediaQuery',
             widget: nvWrapper.wrap(RegularPage()),
           );
 
@@ -111,7 +123,7 @@ void main() {
     final nvGolden =
         NvGolden.grid(nrColumns: 1, screen: Screen(size: Size(300, 350)))
           ..addScenario(
-            name: 'with MediaQuery',
+            name: 'Page using MediaQuery',
             widget: nvWrapper.wrap(SampleImageButton()),
           );
 
