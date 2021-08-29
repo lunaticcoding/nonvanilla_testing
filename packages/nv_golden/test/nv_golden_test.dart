@@ -93,11 +93,11 @@ void main() {
     final nvGolden =
         NvGolden.devices(deviceSizes: [Device.iphone12pro, Device.iphone5s])
           ..addScenario(
-            name: 'Page using MediaQuery',
+            name: 'with MediaQuery',
             widget: nvWrapper.wrap(MediaQueryPage()),
           )
           ..addScenario(
-            name: 'Page without using MediaQuery',
+            name: 'no MediaQuery',
             widget: nvWrapper.wrap(RegularPage()),
           );
 
@@ -111,7 +111,7 @@ void main() {
     final nvGolden =
         NvGolden.grid(nrColumns: 1, screen: Screen(size: Size(300, 350)))
           ..addScenario(
-            name: 'Page using MediaQuery',
+            name: 'with MediaQuery',
             widget: nvWrapper.wrap(SampleImageButton()),
           );
 
