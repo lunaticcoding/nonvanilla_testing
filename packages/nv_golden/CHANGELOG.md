@@ -1,3 +1,11 @@
+## 0.1.1
+
+* Add image to docs in pub.dev
+
+## 0.1.0
+
+* Increase font size (breaking change), remove border for grid tests and add documentation
+
 ## 0.0.10
 
 * Remove google_fonts support - waiting for google_fonts to provide loading function
