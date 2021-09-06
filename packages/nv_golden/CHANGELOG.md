@@ -1,4 +1,20 @@
-## 0.1.1
+## 0.2.0
+
+* Use smaller pixel device ratio for performance reasons
+
+## 0.1.4
+
+* Fix bug in wrapScenario callback
+
+## 0.1.3
+
+* Add wrapScenario callback to easier add things like scaffolds to pages that you want to test
+
+## 0.1.2
+
+* Add more devices for testing
+
+* ## 0.1.1
 
 * Add image to docs in pub.dev
 
