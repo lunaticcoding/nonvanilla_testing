@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Update repository url and dependencies in pubspec.yaml
+
 ## 0.0.5
 
 * Document withState method
