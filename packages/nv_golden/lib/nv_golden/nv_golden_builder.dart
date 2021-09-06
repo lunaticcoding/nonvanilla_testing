@@ -21,6 +21,7 @@ class NvGolden {
   final List<Scenario> _scenarios;
   final List<Screen> _deviceSizes;
   final Widget Function(Widget child)? wrap;
+  final Widget Function(Widget child)? wrapScenario;
   final BoxDecoration? decoration;
 
   /// Constructor for widget tests
@@ -28,6 +29,7 @@ class NvGolden {
     required this.nrColumns,
     Screen? screen,
     this.wrap,
+    this.wrapScenario,
     this.decoration,
   })  : _scenarios = [],
         _deviceSizes = screen != null ? [screen] : [];
@@ -37,6 +39,7 @@ class NvGolden {
     required List<Screen> deviceSizes,
     BoxDecoration? decoration,
     this.wrap,
+    this.wrapScenario,
   })  : nrColumns = deviceSizes.length,
         _scenarios = [],
         _deviceSizes = deviceSizes,
@@ -60,6 +63,7 @@ class NvGolden {
           name: name,
           widget: widget,
           screen: screen,
+          wrap: wrapScenario,
         ),
       );
     else
@@ -69,6 +73,7 @@ class NvGolden {
             name: name,
             widget: widget,
             screen: screen,
+            wrap: wrapScenario,
           ),
         ),
       );
