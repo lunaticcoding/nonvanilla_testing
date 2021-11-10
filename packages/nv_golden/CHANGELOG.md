@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Add loadFonts callback in case users want to load fonts not picked up by init.
+
 ## 0.2.0
 
 * Use smaller pixel device ratio for performance reasons
