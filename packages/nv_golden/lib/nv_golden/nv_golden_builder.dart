@@ -47,7 +47,19 @@ class NvGolden {
         assert(deviceSizes.isNotEmpty);
 
   /// Initialize golden tests
-  static Future<void> init() async => loadAppFonts();
+  static Future<void> init() => loadAppFonts();
+
+  /// Optionally load fonts
+  static Future<void> loadFont({
+    required String name,
+    required List<String> paths,
+    bool isRelativePath = true,
+  }) =>
+      loadCustomFont(
+        name: name,
+        paths: paths,
+        isRelativePath: isRelativePath,
+      );
 
   /// Add a golden test scenario
   void addScenario({
