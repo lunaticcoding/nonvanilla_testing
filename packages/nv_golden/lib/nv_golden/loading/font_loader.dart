@@ -4,11 +4,16 @@
 /// Use of this source code is governed by a BSD-style
 /// license that can be found in the LICENSE file or at
 /// https://opensource.org/licenses/BSD-3-Clause
+///
+/// loadFont(...) Method added by us.
 /// ***************************************************
 import 'dart:convert';
+import 'package:file/local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:file/file.dart';
+import 'package:platform/platform.dart';
 
 ///By default, flutter test only uses a single "test" font called Ahem.
 ///
@@ -82,3 +87,31 @@ const List<String> _overridableFonts = [
   '.SF Pro Text',
   '.SF Pro Display',
 ];
+
+Future<void> loadCustomFont({
+  required String name,
+  required List<String> paths,
+  bool isRelativePath = true,
+}) async {
+  const fs = LocalFileSystem();
+  const platform = LocalPlatform();
+  final Directory root = isRelativePath
+      ? fs.currentDirectory
+      : fs.directory(platform.environment['FLUTTER_ROOT']);
+
+  final files = paths.map((path) => root.childFile(path)).toList();
+  final fileName = name;
+
+  final bytesList = files
+      .map(
+        (file) => Future<ByteData>.value(
+          file.readAsBytesSync().buffer.asByteData(),
+        ),
+      )
+      .toList();
+
+  final fontLoader = FontLoader(fileName);
+  bytesList.forEach((bytes) => fontLoader.addFont(bytes));
+
+  await fontLoader.load();
+}
