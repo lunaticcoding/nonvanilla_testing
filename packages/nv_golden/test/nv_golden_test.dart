@@ -11,7 +11,7 @@ import 'sample_widgets/mediaquery_page.dart';
 import 'sample_widgets/regular_page.dart';
 
 void main() {
-  setUpAll(loadAppFonts);
+  setUpAll(NvGolden.init);
 
   testWidgets('test widget with universal screen size in 2x2 grid',
       (tester) async {
