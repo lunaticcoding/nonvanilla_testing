@@ -1,6 +1,6 @@
 name: nv_cubit_testing
 description: Cubit testing plugin used by NonVanilla. It provides a more flexible solution than bloc_test.
-version: 0.0.6
+version: 0.0.8+1
 homepage: https://github.com/nonvanilla-shop/nonvanilla_testing
 repository: https://github.com/nonvanilla-shop/nonvanilla_testing/tree/master/packages/nv_cubit_testing
 
@@ -11,8 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^7.1.0
-  mockito: ^5.0.15
+  bloc: ^8.0.1
+  mockito: ^5.0.16
+  mocktail: ^0.2.0
 
 dev_dependencies:
   flutter_test:

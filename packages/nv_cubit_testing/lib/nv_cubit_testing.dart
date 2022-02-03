@@ -1,7 +1,8 @@
 library nv_cubit_testing;
 
 import 'package:bloc/bloc.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mockito/mockito.dart' as mockito;
+import 'package:mocktail/mocktail.dart' as mocktail;
 
 /// A wrapper to increase discoverability should more methods be added in the
 /// future.
@@ -29,8 +30,14 @@ class NvCubitTesting {
 }
 
 extension CubitWhen<T> on Cubit<T> {
-  void withState(T cubitState) {
-    when(state).thenAnswer((_) => cubitState);
-    when(stream).thenAnswer((_) => Stream.value(cubitState));
+  void withMockitoState(T cubitState) {
+    mockito.when(state).thenAnswer((_) => cubitState);
+    mockito.when(stream).thenAnswer((_) => Stream.value(cubitState));
+  }
+
+  void withMocktailState(T cubitState) {
+    mocktail.when(() => state).thenAnswer((_) => cubitState);
+    mocktail.when(() => stream).thenAnswer((_) => Stream.value(cubitState));
+    mocktail.when(close).thenAnswer((_) async {});
   }
 }

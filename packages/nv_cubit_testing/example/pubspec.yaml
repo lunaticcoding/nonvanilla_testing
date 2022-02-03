@@ -23,16 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.3
-  flutter_bloc: ^7.0.1
-  freezed_annotation: ^0.14.2
+  cupertino_icons: ^1.0.4
+  flutter_bloc: ^8.0.0
+  freezed_annotation: ^1.0.0
   nv_cubit_testing:
     path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  freezed: ^0.14.2
+  freezed: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
