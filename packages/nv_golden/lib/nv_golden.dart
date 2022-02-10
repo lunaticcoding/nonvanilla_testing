@@ -9,6 +9,7 @@ import 'package:nv_golden/nv_golden/screen.dart';
 export 'nv_golden/create_golden.dart';
 export 'nv_golden/nv_golden_multiple.dart';
 export 'nv_golden/screen.dart' show Device, Screen;
+export 'nv_golden/widget_wrapper.dart';
 
 abstract class NvGolden {
   static NvGoldenMultiple grid({
