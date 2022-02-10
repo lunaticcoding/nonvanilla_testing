@@ -11,8 +11,7 @@ import 'sample_widgets/icon_button.dart';
 Future<void> main() async {
   setUpAll(NvGolden.init);
 
-  testWidgets('test widget with different screen sizes in 2x2 grid',
-      (tester) async {
+  testWidgets('toggle IconButton color on icon clicked', (tester) async {
     final nvWrapper = NvWidgetWrapper()..withDirectionality();
     final largeScreen = Screen(size: Size(200, 100));
 
@@ -27,22 +26,17 @@ Future<void> main() async {
 
     await tester.createSequenceGolden(
       nvGolden,
-      'name-1',
+      'sequence-icon-button-1',
       gestures: [NvGesture.tap(finder: finder)],
     );
     await tester.createSequenceGolden(
       nvGolden,
-      'name-2',
+      'sequence-icon-button-2',
       gestures: [NvGesture.tap(finder: finder)],
     );
     await tester.createSequenceGolden(
       nvGolden,
-      'name-3',
-      gestures: [NvGesture.tap(finder: finder)],
-    );
-    await tester.createSequenceGolden(
-      nvGolden,
-      'name-4',
+      'sequence-icon-button-3',
       gestures: [NvGesture.tap(finder: finder)],
     );
   });
