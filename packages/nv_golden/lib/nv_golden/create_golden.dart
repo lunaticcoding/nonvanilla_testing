@@ -9,8 +9,9 @@ import 'package:nv_golden/nv_golden_icons.dart';
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(
     NvGoldenBase nvGolden,
-    String goldenName,
-  ) async {
+    String goldenName, {
+    Future<void> Function()? afterPump,
+  }) async {
     final widget = nvGolden.wrap?.call(nvGolden.widget) ??
         MaterialApp(
           home: nvGolden.widget,
@@ -29,7 +30,8 @@ extension CreateGolden on WidgetTester {
 
     await _defaultPrimeAssets();
 
-    await pump();
+    await pumpAndSettle();
+    await afterPump?.call();
 
     await expectLater(
       find.byWidget(widget),
@@ -41,6 +43,7 @@ extension CreateGolden on WidgetTester {
     NvGoldenSingular nvGolden,
     String name, {
     required List<NvGesture> gestures,
+    Future<void> Function()? afterPump,
   }) async {
     final isPumped = this.any(find.byType(DefaultAssetBundle));
 
@@ -72,6 +75,7 @@ extension CreateGolden on WidgetTester {
     );
 
     await _pumpWidgetWithGestures(widgetState, []);
+    await afterPump?.call();
 
     for (NvGesture gesture in gestures) {
       final finder = find.descendant(
