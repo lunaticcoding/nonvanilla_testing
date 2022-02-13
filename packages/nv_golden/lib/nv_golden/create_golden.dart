@@ -172,7 +172,7 @@ class TouchBadge extends StatelessWidget {
       child: Icon(
         NvGoldenIcon.tap,
         size: 30,
-        color: color.computeLuminance() > 0.3 ? Colors.white : Colors.black,
+        color: color.computeLuminance() < 0.3 ? Colors.white : Colors.black,
       ),
     );
   }
