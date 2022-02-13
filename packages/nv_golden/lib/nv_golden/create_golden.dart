@@ -44,6 +44,7 @@ extension CreateGolden on WidgetTester {
     String name, {
     required List<NvGesture> gestures,
     Future<void> Function()? afterPump,
+    Color touchColor = Colors.orange,
   }) async {
     final isPumped = this.any(find.byType(DefaultAssetBundle));
 
@@ -59,11 +60,15 @@ extension CreateGolden on WidgetTester {
       binding.window.devicePixelRatioTestValue = 1.0;
       binding.window.textScaleFactorTestValue = 1.0;
 
-      await _pumpWidgetWithGestures(widget, []);
+      await _pumpWidgetWithGestures(widget, gestures: [], color: touchColor);
     }
 
     final widgetState = this.widget(find.byType(MaterialApp));
-    await _pumpWidgetWithGestures(widgetState, gestures);
+    await _pumpWidgetWithGestures(
+      widgetState,
+      gestures: gestures,
+      color: touchColor,
+    );
 
     await _defaultPrimeAssets();
 
@@ -74,7 +79,7 @@ extension CreateGolden on WidgetTester {
       matchesGoldenFile('goldens/$name.png'),
     );
 
-    await _pumpWidgetWithGestures(widgetState, []);
+    await _pumpWidgetWithGestures(widgetState, gestures: [], color: touchColor);
     await afterPump?.call();
 
     for (NvGesture gesture in gestures) {
@@ -87,9 +92,10 @@ extension CreateGolden on WidgetTester {
   }
 
   Future<void> _pumpWidgetWithGestures(
-    Widget widget,
-    List<NvGesture> gestures,
-  ) async {
+    Widget widget, {
+    required List<NvGesture> gestures,
+    required Color color,
+  }) async {
     final widgetToPump = DefaultAssetBundle(
       bundle: TestAssetBundle(),
       child: Directionality(
@@ -107,7 +113,7 @@ extension CreateGolden on WidgetTester {
               return Positioned(
                 left: center.dx - 19,
                 top: center.dy - 19,
-                child: TouchBadge(),
+                child: TouchBadge(color: color),
               );
             }),
           ],
@@ -148,17 +154,26 @@ extension CreateGolden on WidgetTester {
 }
 
 class TouchBadge extends StatelessWidget {
-  const TouchBadge({Key? key}) : super(key: key);
+  final Color color;
+
+  const TouchBadge({
+    Key? key,
+    required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.orange,
+        color: color,
       ),
       padding: const EdgeInsets.all(4),
-      child: Icon(NvGoldenIcon.tap, size: 30),
+      child: Icon(
+        NvGoldenIcon.tap,
+        size: 30,
+        color: color.computeLuminance() > 0.3 ? Colors.white : Colors.black,
+      ),
     );
   }
 }
