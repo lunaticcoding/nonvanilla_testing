@@ -1,4 +1,4 @@
-# NvGolden
+# NvGolden (v1.0.0-beta)
 
 ## Table of Contents
 
