@@ -1,3 +1,15 @@
+## 1.0.0+1-beta
+
+* Remove unused imports
+* Add Doc Strings
+
+## 1.0.0-beta
+
+* Add sequence testing approach
+* Add singular golden constructor
+* Add afterPump callback
+* Refactor internal structure (change should not be breaking)
+
 ## 0.2.1
 
 * Add loadFonts callback in case users want to load fonts not picked up by init.
@@ -18,7 +30,7 @@
 
 * Add more devices for testing
 
-* ## 0.1.1
+## 0.1.1
 
 * Add image to docs in pub.dev
 
