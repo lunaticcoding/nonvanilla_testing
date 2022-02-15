@@ -47,6 +47,8 @@ void main() {
       );
 
     await tester.createGolden(nvGolden, 'icon_button_universal_size');
+
+    expect(find.byType(Icon), findsNWidgets(4));
   });
 
   testWidgets('test widget with different screen sizes in 2x2 grid',
@@ -104,7 +106,6 @@ void main() {
           );
 
     await tester.createGolden(nvGolden, 'multiple_device_media_query_page');
-    await tester.createGolden(nvGolden, 'image_button');
   });
 
   testWidgets('test image loading', (tester) async {
