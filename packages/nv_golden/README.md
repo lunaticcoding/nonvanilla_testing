@@ -1,54 +1,145 @@
+# NvGolden
+
+## Table of Contents
+
+- [NvGolden](#nv_golden)
+  - [init](#init)
+  - [singular](#singular)
+  - [grid](#grid)
+  - [devices](#devices)
+- [Golden Creation](#golden_creation)
+  - [createGolden](#createGolden)
+  - [createSequenceGolden](#createSequenceGolden)
+- [Display](#display)
+  - [Device](#device)
+  - [Screen](#screen)
+- [Gestures](#gestures)
+  - [tap](#tap)
+
 ## NvGolden
-### init()
-The init method must be called in the setUpAll callback to load the fonts. Otherwise your screenshots will contain black squares instead of readable text. 
 
-### device()
-The `NvGolden.device(...)` constructor takes a list of `Screen` Objects. You can create your own or use the ones provided in `Device`.
+### init
+The init method has to be called before running any golden test which includes text or icons. The init method attempts to load all fonts registered within the pubspec.yaml file. If init is unable to load your fonts you can manually load them using `NvGolden.loadFont(...)`. Without your fonts being loaded, your screenshots will display black squares instead of readable text. 
+```dart
+setUpAll(NvGolden.init);
 
-### grid()
-The `NvGolden.grid(...)` constructor takes a nrColumns argument specifying the number of columns for your golden file. You can pass in one global `Screen` Object or have each `Scenario` with it's own `Screen`. 
-
-### addScenario()
-The `addScenario(...)` method is the place where all the magic happens. Pass in a name and the widget you want to test and you are good to go.
-
-## TL;DR
-The following test shows you pretty much everything there is to know. 
-```void main() {
-  setUpAll(loadAppFonts);
-
-  testWidgets('test widget with universal screen size in 2x2 grid',
-      (tester) async {
-    final smallDevice = Screen(size: Size(150, 60));
-
-    final nvGolden = NvGolden.grid(nrColumns: 2, screen: smallDevice)
-      ..addScenario(
-        name: 'Title',
-        widget: nvWrapper.wrap(
-          SampleIconButton(
-            text: 'Title',
-            icon: Icons.title,
-          ),
-        ),
-      )
-      ..addScenario(
-        name: 'Circle',
-        widget: nvWrapper.wrap(
-          SampleIconButton(
-            text: 'Circle',
-            icon: Icons.circle,
-          ),
-        ),
-      );
-
-    await tester.createGolden(nvGolden, 'icon_button_universal_size');
-  });
-}
+// Or alternatively (in case your fonts aren't automatically picked up)
+setUpAll(() => Future.wait([
+    NvGolden.init(),
+    NvGolden.loadFont(
+      name: 'Roboto',
+      paths: ['lib/fonts/Roboto-Regular.ttf'],
+    ),
+  ]),
+);
 ```
 
-It produces the following screenshot/golden:
+### singular
+The singular constructor allows you to render a single scenario. This is especially useful when added to regular widget tests so you can see what is being rendered during your test. 
 
+```dart
+testWidgets('your test name', (tester) async {
+    final nvGolden = NvGolden.singular(
+      widget: nvWrapper.wrap(YourWidget(...)),
+      screen: Screen(size: Size(200, 100)),
+    );
 
-![Example NvGolden output](example/test/goldens/icon_button_universal_size.png)
+    await tester.createGolden(nvGolden, 'your-golden-name');
 
-## Google Fonts
-To user this plugin with google_fonts you'll need to first download the font (as recommended by google_fonts) and then use the `NvGolden.loadFonts(...)` method with the correct font name as well as paths to your font files.
+    // Expect statements have to happen after the createGolden or createSequenceGolden call
+    // because those calls also take care of pumping your widget!
+    expect(find.byType(YourWidget), findsOneWidget);
+});
+```
+
+### grid
+The grid constructor allows you to render a several golden scenarios into a single file.
+
+```dart
+testWidgets('your test name', (tester) async {
+  final nvGolden = NvGolden.grid(
+    nrColumns: 2, 
+    screen: Screen(size: Size(200, 100)),
+  )
+    ..addScenario(
+      name: 'Icon 1',
+      widget: nvWrapper.wrap(YourWidget(...)),
+    )
+    ..addScenario(...)
+    ..addScenario(...)
+    ..addScenario(...);
+
+    await tester.createGolden(nvGolden, 'your-golden-name');
+
+    // Expect statements have to happen after the createGolden or createSequenceGolden call
+    // because those calls also take care of pumping your widget!
+    // Keep in mind that your widget will be rendered once per scenario!
+    expect(find.byType(YourWidget), findsNWidgets(4));
+});
+```
+
+### devices
+The devices constructor renders every scenario once per device. It is highly recommended to add these test on a page/screen level with a very small device (such as the `Device.iphone5s`) and a rather large one (such as the 'Device.iphone12proMax`) to ensure your designs look nice on big screens and don't overflow on small ones.
+
+```dart
+testWidgets('your test name', (tester) async {
+  final nvGolden = NvGolden.devices(
+    deviceSizes: [Device.iphone5s, Device.iphone12proMax],
+  )
+  ..addScenario(
+    name: 'scenario name',
+    widget: YourWidgt(...),
+  )
+  ..addScenario(...);
+
+  await tester.createGolden(nvGolden, 'your-golden-name');
+
+  // Expect statements have to happen after the createGolden or createSequenceGolden call
+  // because those calls also take care of pumping your widget!
+  // Keep in mind that your widget will be rendered once per Device for every scenario!
+  expect(find.byType(YourWidget), findsNWidgets(4));
+});
+```
+## Golden Creation
+The golden creation methods are extensions on the WidgetTester instance. They'll take an instance of NvGolden as the first argument and the name of the golden file as the second one.
+
+### createGolden
+The `createGolden(...)` method renders the NvGolden instances scenario(s). For singular Goldens it will merely render the widget while it will add a title for both the `grid` and the `devices` constructor.
+
+```dart
+await tester.createGolden(nvGolden, 'your-golden-name');
+```
+
+### createSequenceGolden
+During widget testing one might also want to tap certain elements on the screen (maybe even several of them in order). This is where Sequence testing comes in. It renders where the tap event(s) occurred to also add a visible check whether the correct element was clicked or not. 
+
+`createSequenceGolden(...)` is only compatible with `NvGolden.singular(...)`.
+
+```dart
+await tester.createSequenceGolden(
+  nvGolden,
+  'your-golden-name',
+  // Renders taps and optionally applies them to the pumped widget
+  gestures: [NvGesture.tap(finder: finder)],
+);
+```
+
+## Display
+The golden builder methods need to know how much space is available to the widget being rendered. 
+### Device
+`Device` is an abstract class holding some common test devices readily available for you.
+### Screen
+You can also create your own `Device` using the Screen class. 
+
+```dart
+Screen(
+   name: 'Iphone 12 Pro',
+  size: Size(390, 844),
+  safeArea: const EdgeInsets.fromLTRB(0.0, 47.0, 0.0, 34.0),
+);
+```
+
+## Gestures
+`createSequenceGolden` allows for interactive golden testing. All gestures are rendered on the golden first and applied after the golden file has been saved. The result of a sequence golden will be used as the input for the following sequence golden.  
+### tap
+`tap` simulates a tap event on the specified finder. This is currently the only Gesture implemented. More are soon to come. 
