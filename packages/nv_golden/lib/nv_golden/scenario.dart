@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nv_golden/nv_golden/screen.dart';
 
+/// A Wrapper around the widget to be tested used by NvGolden.grid as well as
+/// NvGolden.devices.
 class Scenario {
   static const double _margin = 8;
   static const double _borderThickness = 1;
@@ -12,6 +14,16 @@ class Scenario {
   final Screen screen;
   final Widget Function(Widget child)? wrap;
 
+  /// A Wrapper around the widget to be tested used by NvGolden.grid as well as
+  /// NvGolden.devices.
+  Scenario({
+    required this.name,
+    required this.widget,
+    required this.screen,
+    this.wrap,
+  });
+
+  /// Compute the size the scenario will take up including padding, border, etc.
   Size get size => Size(
         screen.size.width + _margin * 2 + _borderThickness * 2,
         screen.size.height +
@@ -21,13 +33,9 @@ class Scenario {
             _space,
       );
 
-  Scenario({
-    required this.name,
-    required this.widget,
-    required this.screen,
-    this.wrap,
-  });
-
+  /// Build the scenario with paddings, outlines etc to better distinguish them
+  /// once several scenarios are being tested. This is being used by
+  /// NvGoldenMultiple.
   Widget build(BoxDecoration? decoration) => Container(
         margin: const EdgeInsets.all(_margin),
         width: screen.size.width,

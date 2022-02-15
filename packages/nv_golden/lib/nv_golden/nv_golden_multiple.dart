@@ -1,16 +1,14 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:nv_golden/nv_golden/nv_golden_base.dart';
 import 'package:nv_golden/nv_golden/screen.dart';
 
 import 'iterable_extensions.dart';
 import 'scenario.dart';
 
-/// The central class of our golden testing framework. It provides a small but
-/// powerful interface for golden tests.
+/// The NvGolden class for golden tests with multiple instances of the tested
+/// Scenario(s) in a single file.
 class NvGoldenMultiple extends NvGoldenBase {
   static const double _padding = 8;
   final int nrColumns;
@@ -19,7 +17,7 @@ class NvGoldenMultiple extends NvGoldenBase {
   final Widget Function(Widget child)? wrapScenario;
   final BoxDecoration? decoration;
 
-  /// Constructor for widget tests
+  /// Constructor for grid tests
   NvGoldenMultiple.grid({
     required this.nrColumns,
     Screen? screen,
@@ -73,6 +71,7 @@ class NvGoldenMultiple extends NvGoldenBase {
       );
   }
 
+  /// Expose the widget for the golden builder files.
   Widget get widget => Container(
         color: Colors.white,
         padding: EdgeInsets.all(_padding),

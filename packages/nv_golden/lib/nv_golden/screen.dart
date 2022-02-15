@@ -26,23 +26,27 @@ class Screen {
 /// since it's one of the smallest screens still in circulation. All our test
 /// devices have their devicePixelRatio set to 1.0 for performance reasons.
 abstract class Device {
+  /// IPhone 5S
   static Screen get iphone5s => Screen(
         name: 'Iphone 5S',
         size: Size(320, 568),
       );
 
+  /// Iphone 12 Pro
   static Screen get iphone12pro => Screen(
         name: 'Iphone 12 Pro',
         size: Size(390, 844),
         safeArea: const EdgeInsets.fromLTRB(0.0, 47.0, 0.0, 34.0),
       );
 
+  /// Iphone 12 Pro Max
   static Screen get iphone12proMax => Screen(
-        name: 'Iphone 12 Pro',
+        name: 'Iphone 12 Pro Max',
         size: Size(428, 926),
         safeArea: const EdgeInsets.fromLTRB(0.0, 47.0, 0.0, 34.0),
       );
 
+  /// Huawei P9
   static Screen get huaweiP9 => Screen(
         name: 'Huawei P9',
         size: Size(360, 598),

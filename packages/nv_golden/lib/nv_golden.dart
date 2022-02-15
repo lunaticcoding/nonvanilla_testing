@@ -11,7 +11,12 @@ export 'nv_golden/nv_golden_multiple.dart';
 export 'nv_golden/screen.dart' show Device, Screen;
 export 'nv_golden/widget_wrapper.dart';
 
+/// Exposes all golden builders available:
+/// singular
+/// grid
+/// devices
 abstract class NvGolden {
+  /// Grid NvGolden Constructor
   static NvGoldenMultiple grid({
     required int nrColumns,
     Screen? screen,
@@ -27,6 +32,7 @@ abstract class NvGolden {
         decoration: decoration,
       );
 
+  /// Devices NvGolden Constructor
   static NvGoldenMultiple devices({
     required List<Screen> deviceSizes,
     Widget Function(Widget child)? wrap,
@@ -40,6 +46,7 @@ abstract class NvGolden {
         deviceSizes: deviceSizes,
       );
 
+  /// Singular NvGolden Constructor
   static NvGoldenSingular singular({
     required Widget widget,
     required Screen screen,
