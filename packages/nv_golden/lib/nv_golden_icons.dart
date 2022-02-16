@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/NvGoldenIcon.ttf
 ///
-/// 
+///
 ///
 import 'package:flutter/widgets.dart';
 
@@ -21,5 +21,6 @@ class NvGoldenIcon {
   static const _kFontFam = 'NvGoldenIcon';
   static const String? _kFontPkg = null;
 
-  static const IconData tap = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tap =
+      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
