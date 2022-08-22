@@ -8,9 +8,11 @@
 /// loadFont(...) Method added by us.
 /// ***************************************************
 import 'dart:convert';
+
+import 'package:file/file.dart';
+import 'package:file/local.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:file/file.dart';
 import 'package:platform/platform.dart';
 
 ///By default, flutter test only uses a single "test" font called Ahem.
