@@ -63,7 +63,7 @@ extension CreateGolden on WidgetTester {
       await _pumpWidgetWithGestures(widget, gestures: [], color: touchColor);
     }
 
-    final widgetState = this.widget(find.byType(MaterialApp));
+    final widgetState = this.widget(find.byType(MaterialApp).first);
     await _pumpWidgetWithGestures(
       widgetState,
       gestures: gestures,
