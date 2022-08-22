@@ -8,8 +8,6 @@
 /// loadFont(...) Method added by us.
 /// ***************************************************
 import 'dart:convert';
-import 'package:file/local.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:file/file.dart';
@@ -51,7 +49,6 @@ Future<void> loadAppFonts() async {
 ///
 /// Ultimately, the font loader will load whatever we tell it, so if we see a font that looks like
 /// a Material or Cupertino font family, let's treat it as the main font family
-@visibleForTesting
 String derivedFontFamily(Map<String, dynamic> fontDefinition) {
   if (!fontDefinition.containsKey('family')) {
     return '';
