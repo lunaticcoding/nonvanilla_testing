@@ -27,17 +27,17 @@ Future<void> main() async {
     await tester.createSequenceGolden(
       nvGolden,
       'sequence-icon-button-1',
-      gestures: [NvGesture.tap(finder: finder)],
+      gestures: [NvGestureTap(finder: finder)],
     );
     await tester.createSequenceGolden(
       nvGolden,
       'sequence-icon-button-2',
-      gestures: [NvGesture.tap(finder: finder)],
+      gestures: [NvGestureTap(finder: finder)],
     );
     await tester.createSequenceGolden(
       nvGolden,
       'sequence-icon-button-3',
-      gestures: [NvGesture.tap(finder: finder)],
+      gestures: [NvGestureTap(finder: finder)],
     );
   });
 }
