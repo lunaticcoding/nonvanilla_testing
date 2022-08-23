@@ -4,20 +4,35 @@ abstract class NvGesture {
   final bool apply;
   final Finder Function() finder;
 
-  NvGesture(this.apply, this.finder);
+  NvGesture({required this.apply, required this.finder});
 
-  static NvGestureTap tap({
-    required Finder Function() finder,
+  T map<T>({
+    required T Function(NvGestureTap) tap,
+    required T Function(NvGestureDrag) drag,
     bool apply = true,
-  }) =>
-      NvGestureTap(finder: finder, apply: apply);
+  }) {
+    if (this is NvGestureTap) {
+      return tap(this as NvGestureTap);
+    } else if (this is NvGestureDrag) {
+      return drag(this as NvGestureDrag);
+    }
+    throw Exception('Gesture not registered with NvGesture.map function');
+  }
 }
 
 class NvGestureTap extends NvGesture {
-  final Finder Function() finder;
-
   NvGestureTap({
-    required this.finder,
-    required bool apply,
-  }) : super(apply, finder);
+    required super.finder,
+    super.apply = true,
+  });
+}
+
+class NvGestureDrag extends NvGesture {
+  final Offset offset;
+
+  NvGestureDrag({
+    required super.finder,
+    required this.offset,
+    super.apply = true,
+  });
 }
