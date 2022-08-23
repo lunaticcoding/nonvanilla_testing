@@ -1,6 +1,5 @@
+import 'package:example/main_page.dart';
 import 'package:flutter/material.dart' hide State;
-
-import '../main.dart';
 
 class StateIcon extends StatelessWidget {
   final CheckState state;
