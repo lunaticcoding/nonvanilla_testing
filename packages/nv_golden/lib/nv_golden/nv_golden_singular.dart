@@ -5,6 +5,7 @@ import 'package:nv_golden/nv_golden/screen.dart';
 /// The NvGolden class for single golden test with assertions as well as
 /// sequence testing
 class NvGoldenSingular extends NvGoldenBase {
+  final Key uniqueKey;
   @override
   final Widget widget;
   final Screen screen;
@@ -14,7 +15,8 @@ class NvGoldenSingular extends NvGoldenBase {
   NvGoldenSingular({
     required this.widget,
     required this.screen,
-  }) : super(wrap: (Widget child) => child);
+  })  : uniqueKey = UniqueKey(),
+        super(wrap: (Widget child) => child);
 
   @override
   Size get size => screen.size;
