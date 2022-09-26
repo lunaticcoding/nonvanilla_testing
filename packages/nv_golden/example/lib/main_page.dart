@@ -13,15 +13,12 @@ class _MainPageState extends State<MainPage> {
   List<Entry> entries = [
     Entry(text: "Hello World!", state: CheckState.done),
     Entry(text: "Some Task", state: CheckState.nothing),
-    Entry(text: "Running Out of task names", state: CheckState.inProgress),
+    Entry(
+      text: "Running Out of tas",
+      state: CheckState.inProgress,
+    ),
     Entry(text: "And one more", state: CheckState.done),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    print('state reset');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +54,10 @@ class _MainPageState extends State<MainPage> {
                   ),
                   const SizedBox(width: 10),
                   DeleteIcon(
-                    onTap: () => setState(
-                      () => entries =
-                          entries.where((e) => e.text != entry.text).toList(),
-                    ),
+                    onTap: () => setState(() {
+                      entries =
+                          entries.where((e) => e.text != entry.text).toList();
+                    }),
                   ),
                 ],
               ),
