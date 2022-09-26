@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart' as img;
+import 'package:nv_golden/nv_golden/image_drawers/drag_drawer.dart';
 import 'package:nv_golden/nv_golden/loading/test_asset_bundle.dart';
 import 'package:nv_golden/nv_golden/models/nv_gesture.dart';
 import 'package:nv_golden/nv_golden/nv_golden_base.dart';
 import 'package:nv_golden/nv_golden/nv_golden_singular.dart';
 import 'package:nv_golden/nv_golden_icons.dart';
+
+import 'loading/sequence_golden_loader.dart';
 
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(
@@ -22,7 +28,7 @@ extension CreateGolden on WidgetTester {
     await binding.setSurfaceSize(screenSize);
     binding.window.physicalSizeTestValue = screenSize;
     binding.window.devicePixelRatioTestValue = 1.0;
-    binding.window.textScaleFactorTestValue = 1.0;
+    binding.platformDispatcher.textScaleFactorTestValue = 1.0;
 
     await pumpWidget(
       DefaultAssetBundle(bundle: TestAssetBundle(), child: widget),
@@ -39,88 +45,68 @@ extension CreateGolden on WidgetTester {
     );
   }
 
+  /// Pumps the initial Widget for a Sequence. Needs to be called
+  /// before the first [createSequenceGolden] call in your test.
+  Future<void> pumpSequence(NvGoldenSingular nvGolden) async {
+    final widget = MaterialApp(
+      key: nvGolden.uniqueKey,
+      home: DefaultAssetBundle(
+        bundle: TestAssetBundle(),
+        child: nvGolden.wrap?.call(nvGolden.widget) ?? nvGolden.widget,
+      ),
+      debugShowCheckedModeBanner: false,
+    );
+    final screenSize = nvGolden.size;
+
+    await binding.setSurfaceSize(screenSize);
+    binding.window.physicalSizeTestValue = screenSize;
+    binding.window.devicePixelRatioTestValue = 1.0;
+    binding.platformDispatcher.textScaleFactorTestValue = 1.0;
+
+    await pumpWidget(widget);
+    await _defaultPrimeAssets();
+  }
+
   Future<void> createSequenceGolden(
     NvGoldenSingular nvGolden,
     String name, {
-    required List<NvGesture> gestures,
+    List<NvGesture>? gestures,
     Future<void> Function()? afterPump,
     Color touchColor = Colors.orange,
   }) async {
-    final isPumped = this.any(find.byType(DefaultAssetBundle));
+    final isPumped = this.any(find.byKey(nvGolden.uniqueKey));
 
     if (!isPumped) {
-      final widget = MaterialApp(
-        home: nvGolden.wrap?.call(nvGolden.widget) ?? nvGolden.widget,
-        debugShowCheckedModeBanner: false,
-      );
-      final screenSize = nvGolden.size;
-
-      await binding.setSurfaceSize(screenSize);
-      binding.window.physicalSizeTestValue = screenSize;
-      binding.window.devicePixelRatioTestValue = 1.0;
-      binding.window.textScaleFactorTestValue = 1.0;
-
-      await _pumpWidgetWithGestures(widget, gestures: [], color: touchColor);
+      throw Exception('Make sure you called [pumpSequence] first!');
     }
-
-    final widgetState = this.widget(find.byType(MaterialApp).first);
-    await _pumpWidgetWithGestures(
-      widgetState,
-      gestures: gestures,
-      color: touchColor,
-    );
-
-    await _defaultPrimeAssets();
 
     await pumpAndSettle();
 
     await expectLater(
-      find.byType(DefaultAssetBundle),
+      find.byKey(nvGolden.uniqueKey),
       matchesGoldenFile('goldens/$name.png'),
     );
 
-    await _pumpWidgetWithGestures(widgetState, gestures: [], color: touchColor);
-    await afterPump?.call();
+    if (gestures?.isNotEmpty ?? false) {
+      await _applyGesturesToGolden(
+        nvGolden: nvGolden,
+        name: name,
+        gestures: gestures!,
+      );
+    }
 
-    for (NvGesture gesture in gestures) {
+    for (NvGesture gesture in gestures ?? []) {
       final finder = find.descendant(
-        of: find.byType(MaterialApp),
+        of: find.byKey(nvGolden.uniqueKey),
         matching: gesture.finder(),
       );
-      await tap(finder);
+      await gesture.map(
+        tap: (gesture) => tap(finder),
+        drag: (gesture) => drag(finder, gesture.offset),
+      );
     }
-  }
 
-  Future<void> _pumpWidgetWithGestures(
-    Widget widget, {
-    required List<NvGesture> gestures,
-    required Color color,
-  }) async {
-    final widgetToPump = DefaultAssetBundle(
-      bundle: TestAssetBundle(),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Stack(
-          children: [
-            widget,
-            ...gestures.map((gesture) {
-              final center = getCenter(
-                find.descendant(
-                  of: find.byType(MaterialApp),
-                  matching: gesture.finder().last,
-                ),
-              );
-              return Positioned(
-                left: center.dx - 19,
-                top: center.dy - 19,
-                child: TouchBadge(color: color),
-              );
-            }),
-          ],
-        ),
-      ),
-    );
-    await pumpWidget(widgetToPump);
+    await pumpAndSettle();
   }
 
   /// A function that waits for all [Image] widgets found in the widget tree to finish decoding.
@@ -150,6 +136,44 @@ extension CreateGolden on WidgetTester {
         return Future<void>(() {});
       }));
     });
+  }
+
+  Future<void> _applyGesturesToGolden({
+    required NvGoldenSingular nvGolden,
+    required String name,
+    required List<NvGesture> gestures,
+  }) async {
+    final path = getGoldenFilePath('goldens/$name.png');
+    final image = img.decodePng(File(path).readAsBytesSync())!;
+    img.brightness(image, -150);
+
+    for (NvGesture gesture in gestures) {
+      gesture.map(
+        tap: (gesture) {
+          final center = getCenter(gesture.finder());
+          img.fillCircle(
+            image,
+            center.dx.round(),
+            center.dy.round(),
+            20,
+            img.getColor(255, 255, 255),
+          );
+        },
+        drag: (gesture) {
+          final center = getCenter(gesture.finder());
+          drawDrag(
+            image,
+            center.dx.round() + gesture.offset.dx.round(),
+            center.dy.round() + gesture.offset.dy.round(),
+            center.dx.round(),
+            center.dy.round(),
+            20,
+          );
+        },
+      );
+    }
+
+    File(path).writeAsBytesSync(img.encodePng(image));
   }
 }
 
