@@ -139,10 +139,9 @@ await tester.createSequenceGolden(
 ```
 
 Example: <br>
-<img width="200px" src="https://user-images.githubusercontent.com/86478606/154092011-19785a0d-a90b-4a1f-a08b-0be8434d0dd8.png" />
-<img width="200px" src="https://user-images.githubusercontent.com/86478606/154092011-19785a0d-a90b-4a1f-a08b-0be8434d0dd8.png" />
-<img width="200px" src="https://user-images.githubusercontent.com/86478606/154092011-19785a0d-a90b-4a1f-a08b-0be8434d0dd8.png" />
-
+|Before interaction|Interaction|After Interaction|
+|----------|----------|----------|
+|<img width="200px" src="https://user-images.githubusercontent.com/86478606/192328188-56e2c40f-0aaa-448c-98d0-511021745da6.png" />|<img width="200px" src="https://user-images.githubusercontent.com/86478606/192328270-fbd93f37-e6a4-4486-a42a-8be4b55b34dc.png" />|<img width="200px" src="https://user-images.githubusercontent.com/86478606/192328286-3ab9a64a-3d71-454e-a26c-0f55dc0b8c0c.png" />|
 
 ## Display
 The golden builder methods need to know how much space is available to the widget being rendered. 
