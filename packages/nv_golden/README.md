@@ -120,6 +120,8 @@ Example Device: <br>
 ### createSequenceGolden
 During widget testing one might also want to tap certain elements on the screen (maybe even several of them in order). This is where Sequence testing comes in. It renders where the tap event(s) occurred to also add a visible check whether the correct element was clicked or not. 
 
+The following code example shows you a swipe gesture on a carousel component and how it can be handy to visualize where the gesture occured.
+
 `createSequenceGolden(...)` is only compatible with `NvGolden.singular(...)`.
 
 ```dart
@@ -127,11 +129,18 @@ await tester.createSequenceGolden(
   nvGolden,
   'your-golden-name',
   // Renders taps and optionally applies them to the pumped widget
-  gestures: [NvGesture.tap(finder: finder)],
+  gestures: [
+    NvGestureDrag(
+      finder: () => find.byType(Image).at(1),
+      offset: Offset(-100, 0),
+    ),
+  ],
 );
 ```
 
 Example: <br>
+<img width="200px" src="https://user-images.githubusercontent.com/86478606/154092011-19785a0d-a90b-4a1f-a08b-0be8434d0dd8.png" />
+<img width="200px" src="https://user-images.githubusercontent.com/86478606/154092011-19785a0d-a90b-4a1f-a08b-0be8434d0dd8.png" />
 <img width="200px" src="https://user-images.githubusercontent.com/86478606/154092011-19785a0d-a90b-4a1f-a08b-0be8434d0dd8.png" />
 
 
@@ -153,4 +162,7 @@ Screen(
 ## Gestures
 `createSequenceGolden` allows for interactive golden testing. All gestures are rendered on the golden first and applied after the golden file has been saved. The result of a sequence golden will be used as the input for the following sequence golden.  
 ### tap
-`tap` simulates a tap event on the specified finder. This is currently the only Gesture implemented. More are soon to come. 
+`tap` simulates a tap event on the specified finder.
+### drag
+`drag` simulates a drag event from the specified finder to the given offset.
+### More are soon to come. 
