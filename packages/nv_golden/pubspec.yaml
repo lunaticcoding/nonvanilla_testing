@@ -13,8 +13,9 @@ dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  file: ^6.1.2
-  platform: ^3.0.2
+  file: ^6.1.4
+  platform: ^3.1.0
+  image: ^3.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
