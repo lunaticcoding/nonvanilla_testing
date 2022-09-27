@@ -1,3 +1,8 @@
+## 2.0.0
+
+* Revamp Sequence Testing 
+* Implement Tap and Drag gesture
+
 ## 1.0.0+1-beta
 
 * Remove unused imports

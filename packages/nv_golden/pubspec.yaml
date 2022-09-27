@@ -1,6 +1,6 @@
 name: nv_golden
 description: The golden testing framework we use at nonvanilla. Thanks to the people at ebay that strongly inspired this plugin with their golden_toolkit.
-version: 1.0.0+1-beta
+version: 2.0.0
 homepage: https://github.com/nonvanilla-shop/nonvanilla_testing/
 repository: https://github.com/nonvanilla-shop/nonvanilla_testing/tree/master/packages/nv_golden
 
@@ -16,6 +16,7 @@ dependencies:
   file: ^6.1.4
   platform: ^3.1.0
   image: ^3.2.0
+  path: ^1.8.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
