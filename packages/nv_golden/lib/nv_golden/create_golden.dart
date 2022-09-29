@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
-import 'package:nv_golden/nv_golden/image_drawers/drag_drawer.dart';
 import 'package:nv_golden/nv_golden/loading/test_asset_bundle.dart';
 import 'package:nv_golden/nv_golden/models/nv_gesture.dart';
 import 'package:nv_golden/nv_golden/nv_golden_base.dart';
 import 'package:nv_golden/nv_golden/nv_golden_singular.dart';
 import 'package:nv_golden/nv_golden_icons.dart';
+import 'package:path/path.dart' as path;
 
-import 'loading/sequence_golden_loader.dart';
+import 'image_drawers/drag_drawer.dart';
 
 extension CreateGolden on WidgetTester {
   Future<void> createGolden(
@@ -84,7 +84,7 @@ extension CreateGolden on WidgetTester {
 
     await expectLater(
       find.byKey(nvGolden.uniqueKey),
-      matchesGoldenFile('goldens/$name.png'),
+      matchesGoldenFile(path.join('goldens', '$name.png')),
     );
 
     if (gestures?.isNotEmpty ?? false) {
@@ -143,8 +143,12 @@ extension CreateGolden on WidgetTester {
     required String name,
     required List<NvGesture> gestures,
   }) async {
-    final path = getGoldenFilePath('goldens/$name.png');
-    final image = img.decodePng(File(path).readAsBytesSync())!;
+    final baseDir = (goldenFileComparator as LocalFileComparator).basedir;
+    final filePath = Uri.parse(
+      path.join(baseDir.path, 'goldens', '$name.png'),
+    );
+    final file = File.fromUri(filePath).readAsBytesSync();
+    final image = img.decodePng(file)!;
     img.brightness(image, -150);
 
     for (NvGesture gesture in gestures) {
@@ -173,7 +177,7 @@ extension CreateGolden on WidgetTester {
       );
     }
 
-    File(path).writeAsBytesSync(img.encodePng(image));
+    File(filePath.path).writeAsBytesSync(img.encodePng(image));
   }
 }
 
