@@ -1,3 +1,12 @@
+## 2.0.0+2
+
+* Fix hardcoded path to golden file 
+
+## 2.0.0+1
+
+* Fix Rectangle calculation 
+* Rotate Rectangle according to points
+
 ## 2.0.0
 
 * Revamp Sequence Testing 
