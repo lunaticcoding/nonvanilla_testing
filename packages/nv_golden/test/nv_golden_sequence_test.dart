@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nv_golden/nv_golden.dart';
-import 'package:nv_golden/nv_golden/create_golden.dart';
 import 'package:nv_golden/nv_golden/models/nv_gesture.dart';
-import 'package:nv_golden/nv_golden/widget_wrapper.dart';
 
 import 'nonvanilla_testing.dart';
 import 'sample_widgets/icon_button.dart';
@@ -22,6 +20,7 @@ Future<void> main() async {
       screen: largeScreen,
     );
 
+    await tester.pumpSequence(nvGolden);
     final finder = () => find.byType(Icon);
 
     await tester.createSequenceGolden(
